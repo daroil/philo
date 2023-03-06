@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/03 19:14:55 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/06 18:02:44 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,28 @@
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
+#include <stdlib.h>
+#include <sys/time.h> // gettimeofday
+#include <unistd.h> // usleep
+#include <stddef.h> // NULL
+
+typedef	struct shared_s
+{
+	pthread_mutex_t	print;
+}	t_shared;
 
 typedef struct philo_s
 {
 	int		input;
 	int		output;
+	int		philo_id;
+	pthread_mutex_t left_fork;
+	pthread_mutex_t *right_fork;
+	pthread_t	id;
+	t_shared	*shared;
 }	t_philo;
+
+
 
 
 #endif
