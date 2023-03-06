@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/06 19:09:21 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:19:12 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,18 @@ void* trial_routine(void *p)
 	philo = (t_philo *) p;
 	long long	start_time;
 	int			time_to_die;
+	int			normal_exit;
 	int			i;
 
 	i = 0;
+	normal_exit = 3;
 	time_to_die = 100;	
 	start_time = get_time();
 	if (philo->philo_id % 2 == 1)
 	{
 		usleep(5000);
 	}
-	while (get_time() - start_time != time_to_die && i < 10)
+	while ((get_time() - start_time) < time_to_die && i < normal_exit)
 	{
 		if (philo->philo_id % 2 == 1)
 		{
@@ -68,7 +70,10 @@ void* trial_routine(void *p)
 		say(philo, "lay down left fork", start_time);
 		i++;
 	}
-	say(philo, "died", start_time);
+	if (i == normal_exit)
+		say(philo, "survived", start_time);
+	else
+		say(philo, "died", start_time);
 	pthread_exit(NULL);
 }
 
