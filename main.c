@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/06 18:31:46 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:09:21 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,35 +33,51 @@ void* trial_routine(void *p)
 
 	philo = (t_philo *) p;
 	long long	start_time;
-	
+	int			time_to_die;
+	int			i;
+
+	i = 0;
+	time_to_die = 100;	
 	start_time = get_time();
 	if (philo->philo_id % 2 == 1)
 	{
-		usleep(10000);
+		usleep(5000);
 	}
-	pthread_mutex_lock(&philo->left_fork);
-	say(philo, "took left fork", start_time);
-	pthread_mutex_lock(philo->right_fork);
-	say(philo, "took right fork", start_time);
-	say(philo, "started eating", start_time);
-	usleep(10000);
-	say(philo, "finished eating", start_time);
-	pthread_mutex_unlock(philo->right_fork);
-	say(philo, "lay down right fork", start_time);
-	pthread_mutex_unlock(&philo->left_fork);
-	say(philo, "lay down left fork", start_time);
+	while (get_time() - start_time != time_to_die && i < 10)
+	{
+		if (philo->philo_id % 2 == 1)
+		{
+			pthread_mutex_lock(&philo->left_fork);
+			say(philo, "took left fork", start_time);
+			pthread_mutex_lock(philo->right_fork);
+			say(philo, "took right fork", start_time);
+		}
+		else
+		{
+			pthread_mutex_lock(philo->right_fork);
+			say(philo, "took right fork", start_time);	
+			pthread_mutex_lock(&philo->left_fork);
+			say(philo, "took left fork", start_time);
+		}
+		say(philo, "started eating", start_time);
+		usleep(10000);
+		say(philo, "finished eating", start_time);
+		pthread_mutex_unlock(philo->right_fork);
+		say(philo, "lay down right fork", start_time);
+		pthread_mutex_unlock(&philo->left_fork);
+		say(philo, "lay down left fork", start_time);
+		i++;
+	}
+	say(philo, "died", start_time);
 	pthread_exit(NULL);
 }
 
 int main(void)
 {
 	t_philo		*philo;
-	t_shared	shared_info;	
+	t_shared	shared_info;
 	int			i;
-	// Declare variable for thread's ID:
-	// pthread_t	*id;
 	int			number_of_philos;
-
 
 	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
     {
