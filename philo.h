@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/06 18:02:44 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/07 13:08:09 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 typedef	struct shared_s
 {
+	int				number_of_philos;
 	pthread_mutex_t	print;
 }	t_shared;
 
