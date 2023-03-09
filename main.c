@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/09 23:37:41 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/09 23:40:21 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,6 @@ void* trial_routine(void *p)
 	time_to_die = philo->shared->time_to_die;
 	time_to_eat = philo->shared->time_to_eat;	
 	time_to_sleep = philo->shared->time_to_sleep;
-	// printf("time to eat :%lld\n",time_to_eat);
-	// printf("time to sleep :%lld\n",time_to_sleep);
-	// printf("time to die :%lld\n",time_to_die);
 	start_time = get_other_time(&philo->shared->time);
 	philo->last_meal = start_time;
 	if (philo->philo_id % 2 == 1)
@@ -126,72 +123,24 @@ void* trial_routine(void *p)
 	}
 	while ((get_other_time(&philo->shared->time) - philo->last_meal) < time_to_die && i < normal_exit)
 	{
-		// if (philo->philo_id % 2 == 0)
-		// {
-		// 	if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
-		// 	say(philo, "took left chopstick", start_time);
-		// 	if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
-		// 	// printf("trying mutex chop_l, id :%d\n", philo->philo_id);
-		// 	pthread_mutex_lock(&philo->chopstick_l);
-		// 	// printf("done mutex chop_l, id :%d\n", philo->philo_id);
-		// 	if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
-		// 	say(philo, "took right chopstick", start_time);
-		// 	if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
-		// 	// printf("trying mutex chop_r, id :%d\n", philo->philo_id);
-		// 	pthread_mutex_lock(philo->chopstick_r);
-		// 	// printf("done mutex chop_r, id :%d\n", philo->philo_id);
-		// }
-		// else
-		// {
 			if (!check_death(philo, start_time))
 			{
 				say(philo, "took right chopstick", start_time);	
-				// printf("trying mutex chop_r, id :%d\n", philo->philo_id);
 				pthread_mutex_lock(philo->chopstick_r);
-				// printf("done mutex chop_r, id :%d\n", philo->philo_id);
 				if (!check_death(philo, start_time))
 				{
 					say(philo, "took left chopstick", start_time);
-					// if (check_death(philo, start_time))
-					// 	unlock_and_exit(philo);
-					// printf("trying mutex chop_l, id :%d\n", philo->philo_id);
 					pthread_mutex_lock(&philo->chopstick_l);
-					// printf("done mutex chop_l, id :%d\n", philo->philo_id);
 				}	
 			}
-		// }
-		// if ((get_time() - start_time) > time_to_die)
-		// {
-		// 	if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
-		// }
-		// if (check_death_flag(philo))
-		// 		unlock_and_exit(philo);
 		philo->last_meal = get_other_time(&philo->shared->time);
-		// if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
 		say(philo, "is eating", start_time);
 		half_asleep(time_to_eat, philo, start_time);
 		pthread_mutex_unlock(&philo->chopstick_l);
 		pthread_mutex_unlock(philo->chopstick_r);
-		// say(philo, "finished eating", start_time);
-		// say(philo, "lay down right chopstick", start_time);
-		// say(philo, "lay down left chopstick", start_time);
-		// if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
 		say(philo, "is sleeping", start_time);
-		// if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
 		half_asleep(time_to_sleep, philo, start_time);
-		// if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
 		say(philo, "is thinking", start_time);
-		// if (check_death(philo, start_time))
-		// 		unlock_and_exit(philo);
 		i++;
 	}
 	if (i == normal_exit)
@@ -255,11 +204,11 @@ int main(void)
 	int			i;
 	// pthread_t	overseer;
 	
-	shared_info.number_of_philos = 3;
+	shared_info.number_of_philos = 2;
 	shared_info.dead = 0;
-	shared_info.time_to_die = 600;
-	shared_info.time_to_eat = 200;
-	shared_info.time_to_sleep = 200;
+	shared_info.time_to_die = 200;
+	shared_info.time_to_eat = 2000000;
+	shared_info.time_to_sleep = 20000000;
 	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
     {
         printf("\n mutex init failed\n");
