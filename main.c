@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/09 23:40:21 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 00:10:53 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	say(t_philo *philo, char *message, long long start_time)
 	if (!check_death(philo, start_time))
 	{
 		pthread_mutex_lock(&philo->shared->print);
-		printf("%d id: %d %s\n", get_other_time(&philo->shared->time), philo->philo_id, message);
+		if (!check_death(philo, start_time))
+			printf("%d id: %d %s\n", get_other_time(&philo->shared->time), philo->philo_id, message);
 		pthread_mutex_unlock(&philo->shared->print);	
 	}
 	// if (check_death(philo, start_time))
@@ -123,16 +124,16 @@ void* trial_routine(void *p)
 	}
 	while ((get_other_time(&philo->shared->time) - philo->last_meal) < time_to_die && i < normal_exit)
 	{
+		if (!check_death(philo, start_time))
+		{
+			say(philo, "took right chopstick", start_time);	
+			pthread_mutex_lock(philo->chopstick_r);
 			if (!check_death(philo, start_time))
 			{
-				say(philo, "took right chopstick", start_time);	
-				pthread_mutex_lock(philo->chopstick_r);
-				if (!check_death(philo, start_time))
-				{
-					say(philo, "took left chopstick", start_time);
-					pthread_mutex_lock(&philo->chopstick_l);
-				}	
-			}
+				say(philo, "took left chopstick", start_time);
+				pthread_mutex_lock(&philo->chopstick_l);
+			}	
+		}
 		philo->last_meal = get_other_time(&philo->shared->time);
 		say(philo, "is eating", start_time);
 		half_asleep(time_to_eat, philo, start_time);
@@ -147,8 +148,12 @@ void* trial_routine(void *p)
 		say(philo, "survived", start_time);
 	else
 	{
-		if (check_death(philo, start_time))
-				unlock_and_exit(philo);
+		if (!philo->shared->dead)
+		{
+			say(philo, "died", start_time);
+			philo->shared->dead = 2;
+		}
+		// check_death(philo, start_time);
 	}
 	pthread_exit(NULL);
 }
@@ -206,9 +211,9 @@ int main(void)
 	
 	shared_info.number_of_philos = 2;
 	shared_info.dead = 0;
-	shared_info.time_to_die = 200;
-	shared_info.time_to_eat = 2000000;
-	shared_info.time_to_sleep = 20000000;
+	shared_info.time_to_die = 400;
+	shared_info.time_to_eat = 200;
+	shared_info.time_to_sleep = 200;
 	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
     {
         printf("\n mutex init failed\n");
