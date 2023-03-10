@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 17:38:30 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 18:47:31 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void* trial_routine(void *p)
 
 	philo = (t_philo *) p;
 	i = 0;
-	normal_exit = 100000000;
+	normal_exit = 7;
 	time_to_die = philo->shared->time_to_die;
 	time_to_eat = philo->shared->time_to_eat;	
 	time_to_sleep = philo->shared->time_to_sleep;
