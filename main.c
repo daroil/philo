@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 16:17:07 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 17:38:30 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void* trial_routine(void *p)
 
 	philo = (t_philo *) p;
 	i = 0;
-	normal_exit = 7;
+	normal_exit = 100000000;
 	time_to_die = philo->shared->time_to_die;
 	time_to_eat = philo->shared->time_to_eat;	
 	time_to_sleep = philo->shared->time_to_sleep;
@@ -233,18 +233,56 @@ int	philo_init(t_shared *shared_info, t_philo *philo)
 	return (0);
 }
 
-int main(void)
+int	ph_atoi(char *str)
+{
+	int	i;
+	int	res;
+	int	sign;
+
+	i = 0;
+	res = 0;
+	sign = 1;
+	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t' || str[i] == '\v'
+		|| str[i] == '\r' || str[i] == '\f')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+		sign += -2 * (str[i++] == '-');
+	while (str[i])
+	{
+		if ('0' <= str[i] && str[i] <= '9')
+		{
+		res *= 10;
+		res += sign * (str[i] - '0');
+		i++;
+		}
+		else
+			return (0);
+	}
+	return (res * (sign == 1));
+}
+
+int	parse_input(int argc, char **argv, t_shared *shared_info)
+{
+	if (argc < 5 || argc > 6)
+		return (1);
+	if (!(shared_info->number_of_philos = ph_atoi(argv[1]))
+		|| !(shared_info->time_to_die = ph_atoi(argv[2]))
+		|| !(shared_info->time_to_eat = ph_atoi(argv[3]))
+		|| !(shared_info->time_to_sleep = ph_atoi(argv[4])))
+			return (1);
+	shared_info->dead = 0;
+	return (0);
+}
+
+int main(int argc, char **argv)
 {
 	t_philo		*philo;
 	t_shared	shared_info;
 	int			i;
 	// pthread_t	overseer;
 	
-	shared_info.number_of_philos = 2;
-	shared_info.dead = 0;
-	shared_info.time_to_die = 800;
-	shared_info.time_to_eat = 2000000;
-	shared_info.time_to_sleep = 2000000;
+	if (parse_input(argc, argv, &shared_info))
+		return (printf("Error\n Wrong input"), 1);
 	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
     {
         printf("\n mutex init failed\n");
