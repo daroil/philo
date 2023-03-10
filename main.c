@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 03:49:40 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 06:38:31 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void	say(t_philo *philo, char *message)
 			printf("%d id: %d %s\n", get_other_time(&philo->shared->time), philo->philo_id, message);
 		pthread_mutex_unlock(&philo->shared->print);	
 	}
-	// if (check_death(philo))
-	// 	unlock_and_exit(philo);
 }
 
 int	check_death_flag(t_philo *philo)
@@ -125,9 +123,9 @@ void* trial_routine(void *p)
 		{
 			say(philo, "took right chopstick");	
 			pthread_mutex_lock(philo->chopstick_r);
+			say(philo, "took left chopstick");
 			if (!check_death(philo))
 			{
-				say(philo, "took left chopstick");
 				pthread_mutex_lock(&philo->chopstick_l);
 				if (!check_death(philo))
 				{
@@ -137,10 +135,10 @@ void* trial_routine(void *p)
 					say(philo, "is eating");
 					half_asleep(time_to_eat, philo);
 				}	
+				pthread_mutex_unlock(&philo->chopstick_l);
 			}	
-			pthread_mutex_unlock(&philo->chopstick_l);
+			pthread_mutex_unlock(philo->chopstick_r);
 		}
-		pthread_mutex_unlock(philo->chopstick_r);
 		say(philo, "is sleeping");
 		half_asleep(time_to_sleep, philo);
 		say(philo, "is thinking");
@@ -218,11 +216,11 @@ int main(void)
 	int			i;
 	// pthread_t	overseer;
 	
-	shared_info.number_of_philos = 4;
+	shared_info.number_of_philos = 200;
 	shared_info.dead = 0;
-	shared_info.time_to_die = 310;
+	shared_info.time_to_die = 420;
 	shared_info.time_to_eat = 200;
-	shared_info.time_to_sleep = 100;
+	shared_info.time_to_sleep = 200;
 	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
     {
         printf("\n mutex init failed\n");
