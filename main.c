@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 06:38:31 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:09:06 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,33 +49,47 @@ void	unlock_and_exit(t_philo *philo)
 	pthread_exit(NULL);	
 }
 
+int	check_death_flag(t_philo *philo)
+{
+	if ((get_other_time(&philo->shared->time) - philo->last_meal) >= philo->shared->time_to_die)
+	{
+		pthread_mutex_lock(&philo->shared->dead_mut);
+		if (!philo->shared->dead)
+			philo->shared->dead = 1;
+		pthread_mutex_unlock(&philo->shared->dead_mut);
+	}
+	if (philo->shared->dead)
+		return (1);
+	return (0);
+}
+
 void	say(t_philo *philo, char *message)
 {
 	if (!check_death(philo))
 	{
 		pthread_mutex_lock(&philo->shared->print);
-		if (!check_death(philo))
+		if (!check_death_flag(philo))
+		{
 			printf("%d id: %d %s\n", get_other_time(&philo->shared->time), philo->philo_id, message);
+		}
 		pthread_mutex_unlock(&philo->shared->print);	
 	}
-}
-
-int	check_death_flag(t_philo *philo)
-{
-	if (philo->shared->dead)
-		return (1);
-	return (0);
 }
 
 int	check_death(t_philo *philo)
 {
 	if ((get_other_time(&philo->shared->time) - philo->last_meal) >= philo->shared->time_to_die)
 	{
-		pthread_mutex_lock(&philo->shared->print);
+		pthread_mutex_lock(&philo->shared->dead_mut);
 		if (!philo->shared->dead)
+		{
+			pthread_mutex_lock(&philo->shared->print);
 			printf("%d id: %d died\n", get_other_time(&philo->shared->time), philo->philo_id);
+			pthread_mutex_unlock(&philo->shared->print);
+		}
+			// say(philo, "died");
 		philo->shared->dead = 1;
-		pthread_mutex_unlock(&philo->shared->print);
+		pthread_mutex_unlock(&philo->shared->dead_mut);
 	}
 	if (philo->shared->dead)
 		return (1);
@@ -87,13 +101,18 @@ void	half_asleep(long long sleep_time, t_philo *philo)
 	long long	i;
 
 	i = get_other_time(&philo->shared->time) + sleep_time;
+	pthread_mutex_lock(&philo->sleep);
 	while (get_other_time(&philo->shared->time) < i)
 	{
 		if (!check_death(philo))
 			usleep(100);
 		else
+		{
+			pthread_mutex_unlock(&philo->sleep);
 			return ;
+		}
 	}
+	pthread_mutex_unlock(&philo->sleep);
 }
 
 void* trial_routine(void *p)
@@ -121,12 +140,12 @@ void* trial_routine(void *p)
 	{
 		if (!check_death(philo))
 		{
-			say(philo, "took right chopstick");	
 			pthread_mutex_lock(philo->chopstick_r);
-			say(philo, "took left chopstick");
+			say(philo, "took right chopstick");	
 			if (!check_death(philo))
 			{
 				pthread_mutex_lock(&philo->chopstick_l);
+				say(philo, "took left chopstick");
 				if (!check_death(philo))
 				{
 					pthread_mutex_lock(&philo->eat);
@@ -153,7 +172,7 @@ void* trial_routine(void *p)
 		if (!philo->shared->dead)
 		{
 			say(philo, "died");
-			philo->shared->dead = 2;
+			philo->shared->dead = 1;
 		}
 		// check_death(philo);
 	}
@@ -201,6 +220,11 @@ int	philo_init(t_shared *shared_info, t_philo *philo)
 			printf("\n mutex init failed\n");
 			return (1);
 		}
+		if (pthread_mutex_init(&philo[i].sleep, NULL))
+		{
+			printf("\n mutex init failed\n");
+			return (1);
+		}
 		philo[i].philo_id = i;
 		philo[i].shared = shared_info;
 		philo[i].chopstick_r = &philo[(i + 1) % shared_info->number_of_philos].chopstick_l;
@@ -227,6 +251,11 @@ int main(void)
         return (1);
     }
 	if (pthread_mutex_init(&shared_info.time, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return (1);
+    }
+	if (pthread_mutex_init(&shared_info.dead_mut, NULL) != 0)
     {
         printf("\n mutex init failed\n");
         return (1);

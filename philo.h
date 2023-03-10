@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 03:35:27 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:07:20 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef	struct shared_s
 	int				number_of_philos;
 	pthread_mutex_t	print;
 	pthread_mutex_t	time;
+	pthread_mutex_t	dead_mut;
 	int				dead;
 	long long		time_to_die;
 	long long		time_to_eat;
@@ -39,6 +40,7 @@ typedef struct philo_s
 	int		philo_id;
 	long long		last_meal;
 	pthread_mutex_t	eat;
+	pthread_mutex_t	sleep;
 	pthread_mutex_t chopstick_l;
 	pthread_mutex_t *chopstick_r;
 	pthread_t	id;
