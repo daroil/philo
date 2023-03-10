@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 16:09:06 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:17:07 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void* trial_routine(void *p)
 
 	philo = (t_philo *) p;
 	i = 0;
-	normal_exit = 100000;
+	normal_exit = 7;
 	time_to_die = philo->shared->time_to_die;
 	time_to_eat = philo->shared->time_to_eat;	
 	time_to_sleep = philo->shared->time_to_sleep;
@@ -240,11 +240,11 @@ int main(void)
 	int			i;
 	// pthread_t	overseer;
 	
-	shared_info.number_of_philos = 200;
+	shared_info.number_of_philos = 2;
 	shared_info.dead = 0;
-	shared_info.time_to_die = 420;
-	shared_info.time_to_eat = 200;
-	shared_info.time_to_sleep = 200;
+	shared_info.time_to_die = 800;
+	shared_info.time_to_eat = 2000000;
+	shared_info.time_to_sleep = 2000000;
 	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
     {
         printf("\n mutex init failed\n");
