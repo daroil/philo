@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/11 01:41:09 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/11 01:42:31 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ int main(int argc, char **argv)
 	t_philo		*philo;
 	t_shared	shared_info;
 	int			i;
-	// pthread_t	overseer;
 
 	// atexit(check_leaks);	
 	if (parse_input(argc, argv, &shared_info))
@@ -122,7 +121,6 @@ int main(int argc, char **argv)
 	philo = malloc(sizeof(t_philo) * shared_info.number_of_philos);
 	if (philo_init(&shared_info, philo))
 		return (1);
-	// printf("init succes\n");
 	i = 0;
 	while (i < shared_info.number_of_philos)
 	{
@@ -130,8 +128,6 @@ int main(int argc, char **argv)
 		i++;
 	}
 	i = 0;
-	// pthread_create(&overseer, NULL, &overseer_routine, &philo);
-	// pthread_join(overseer, NULL);
     // Wait for routine();
 	while (i < shared_info.number_of_philos)
 	{
