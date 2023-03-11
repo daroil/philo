@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/11 01:24:51 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/11 01:40:30 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,19 @@ typedef struct philo_s
 }	t_philo;
 
 int	check_death(t_philo *philo);
+
+//time.c
+long long	get_time(void);
+int			get_other_time(pthread_mutex_t *time_lock);
+
+//parse_init.c
+int	philo_init(t_shared *shared_info, t_philo *philo);
+int	ph_atoi(char *str);
+int	parse_input(int argc, char **argv, t_shared *shared_info);
+
+//checks.c
+int	check_death_flag(t_philo *philo);
+int	check_death(t_philo *philo);
+
 
 #endif
