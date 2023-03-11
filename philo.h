@@ -6,22 +6,22 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 15:07:20 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/11 01:24:51 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <string.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h> // gettimeofday
-#include <unistd.h> // usleep
-#include <stddef.h> // NULL
+# include <stdio.h>
+# include <string.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <sys/time.h> // gettimeofday
+# include <unistd.h> // usleep
+# include <stddef.h> // NULL
 
-typedef	struct shared_s
+typedef struct shared_s
 {
 	int				number_of_philos;
 	pthread_mutex_t	print;
@@ -35,19 +35,18 @@ typedef	struct shared_s
 
 typedef struct philo_s
 {
-	int		input;
-	int		output;
-	int		philo_id;
+	int				input;
+	int				output;
+	int				philo_id;
 	long long		last_meal;
 	pthread_mutex_t	eat;
 	pthread_mutex_t	sleep;
-	pthread_mutex_t chopstick_l;
-	pthread_mutex_t *chopstick_r;
-	pthread_t	id;
-	t_shared	*shared;
+	pthread_mutex_t	chopstick_l;
+	pthread_mutex_t	*chopstick_r;
+	pthread_t		id;
+	t_shared		*shared;
 }	t_philo;
 
 int	check_death(t_philo *philo);
-
 
 #endif

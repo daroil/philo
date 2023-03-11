@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/11 01:00:31 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/11 01:16:01 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ int	check_death(t_philo *philo)
 			printf("%d id: %d died\n", get_other_time(&philo->shared->time), philo->philo_id);
 			pthread_mutex_unlock(&philo->shared->print);
 		}
-			// say(philo, "died");
 		philo->shared->dead = 1;
 		pthread_mutex_unlock(&philo->shared->dead_mut);
 	}
