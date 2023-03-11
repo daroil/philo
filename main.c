@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/10 18:47:31 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/11 01:00:31 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,13 @@ void* trial_routine(void *p)
 
 	philo = (t_philo *) p;
 	i = 0;
-	normal_exit = 7;
+	normal_exit = 120000;
 	time_to_die = philo->shared->time_to_die;
 	time_to_eat = philo->shared->time_to_eat;	
 	time_to_sleep = philo->shared->time_to_sleep;
 	philo->last_meal = get_other_time(&philo->shared->time);
 	if (philo->philo_id % 2 == 0)
-	{
-		// usleep((time_to_sleep/2)*1000);
 		half_asleep(time_to_eat/2, philo);
-	}
 	while ((get_other_time(&philo->shared->time) - philo->last_meal) <= time_to_die && i < normal_exit)
 	{
 		if (!check_death(philo))
@@ -174,7 +171,6 @@ void* trial_routine(void *p)
 			say(philo, "died");
 			philo->shared->dead = 1;
 		}
-		// check_death(philo);
 	}
 	pthread_exit(NULL);
 }
@@ -210,17 +206,9 @@ int	philo_init(t_shared *shared_info, t_philo *philo)
 	i = 0;
 	while (i < shared_info->number_of_philos)
 	{
-		if (pthread_mutex_init(&philo[i].chopstick_l, NULL))
-		{
-			printf("\n mutex init failed\n");
-			return (1);
-		}
-		if (pthread_mutex_init(&philo[i].eat, NULL))
-		{
-			printf("\n mutex init failed\n");
-			return (1);
-		}
-		if (pthread_mutex_init(&philo[i].sleep, NULL))
+		if (pthread_mutex_init(&philo[i].chopstick_l, NULL)
+			|| pthread_mutex_init(&philo[i].eat, NULL)
+			|| pthread_mutex_init(&philo[i].sleep, NULL))
 		{
 			printf("\n mutex init failed\n");
 			return (1);
@@ -271,7 +259,19 @@ int	parse_input(int argc, char **argv, t_shared *shared_info)
 		|| !(shared_info->time_to_sleep = ph_atoi(argv[4])))
 			return (1);
 	shared_info->dead = 0;
+	if (pthread_mutex_init(&shared_info->print, NULL)
+		|| pthread_mutex_init(&shared_info->time, NULL)
+		|| pthread_mutex_init(&shared_info->dead_mut, NULL))
+    {
+        printf("\n mutex init failed\n");
+        return (1);
+    }
 	return (0);
+}
+
+void	check_leaks(void)
+{
+	system("leaks philo");
 }
 
 int main(int argc, char **argv)
@@ -280,24 +280,10 @@ int main(int argc, char **argv)
 	t_shared	shared_info;
 	int			i;
 	// pthread_t	overseer;
-	
+
+	// atexit(check_leaks);	
 	if (parse_input(argc, argv, &shared_info))
 		return (printf("Error\n Wrong input"), 1);
-	if (pthread_mutex_init(&shared_info.print, NULL) != 0)
-    {
-        printf("\n mutex init failed\n");
-        return (1);
-    }
-	if (pthread_mutex_init(&shared_info.time, NULL) != 0)
-    {
-        printf("\n mutex init failed\n");
-        return (1);
-    }
-	if (pthread_mutex_init(&shared_info.dead_mut, NULL) != 0)
-    {
-        printf("\n mutex init failed\n");
-        return (1);
-    }
 	philo = malloc(sizeof(t_philo) * shared_info.number_of_philos);
 	if (philo_init(&shared_info, philo))
 		return (1);
@@ -325,5 +311,6 @@ int main(int argc, char **argv)
 	}
 	pthread_mutex_destroy(&shared_info.print);
 	pthread_mutex_destroy(&shared_info.time);
+	free(philo);
 	return (0);
 }
