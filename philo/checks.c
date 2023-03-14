@@ -6,11 +6,19 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:37:19 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 15:48:54 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:23:35 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+long long	min(long long a, long long b)
+{
+	if (a > b)
+		return (b);
+	else
+		return (a);
+}
 
 int	check_death_flag(t_philo *philo)
 {

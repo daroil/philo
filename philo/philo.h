@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 15:54:35 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:20:16 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,10 @@ int			check_death_flag(t_philo *philo);
 int			check_death(t_philo *philo);
 
 //routine.c
-void	*philo_routine(void *p);
-void	say(t_philo *philo, char *message);
-void	half_asleep(long long sleep_time, t_philo *philo);
+void		*philo_routine(void *p);
+void		say(t_philo *philo, char *message);
+void		half_asleep(long long sleep_time, t_philo *philo);
 long long	min(long long a, long long b);
-void	lonely_dude(t_philo *philo);
-
+void		lonely_dude(t_philo *philo);
 
 #endif

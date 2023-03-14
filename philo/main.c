@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 16:53:42 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:23:37 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,19 @@ void	lonely_dude(t_philo *philo)
 	pthread_exit(NULL);
 }
 
-long long	min(long long a, long long b)
+void	destruction(t_philo *philo, t_shared *shared_info)
 {
-	if (a > b)
-		return (b);
-	else
-		return (a);
-}
+	int	i;
 
-void	check_leaks(void)
-{
-	system("leaks philo");
+	i = 0;
+	while (i < shared_info->number_of_philos)
+	{
+		pthread_mutex_destroy(&philo[i].chopstick_l);
+		i++;
+	}
+	pthread_mutex_destroy(&shared_info->print);
+	pthread_mutex_destroy(&shared_info->time);
+	free(philo);
 }
 
 int	main(int argc, char **argv)
@@ -98,15 +100,6 @@ int	main(int argc, char **argv)
 		pthread_join(philo[i].id, NULL);
 		i++;
 	}
-	// printf("time to sleep : %lld, time to eat: %lld, time to die : %lld \n", philo->shared->time_to_sleep,philo->shared->time_to_eat,philo->shared->time_to_die);
-	i = 0;
-	while (i < shared_info.number_of_philos)
-	{
-		pthread_mutex_destroy(&philo[i].chopstick_l);
-		i++;
-	}
-	pthread_mutex_destroy(&shared_info.print);
-	pthread_mutex_destroy(&shared_info.time);
-	free(philo);
+	destruction(philo, &shared_info);
 	return (0);
 }
