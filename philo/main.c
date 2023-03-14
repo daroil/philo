@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 13:31:46 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 13:44:14 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ void	lonely_dude(t_philo *philo)
 	pthread_exit(NULL);
 }
 
+long long	min(long long a, long long b)
+{
+	if (a > b)
+		return (b);
+	else
+		return (a);
+}
+
 void* trial_routine(void *p)
 {
 	t_philo		*philo;
@@ -78,33 +86,33 @@ void* trial_routine(void *p)
 	if (philo->shared->number_of_philos == 1)
 		lonely_dude(philo);
 	if (philo->philo_id % 2 == 0)
-		half_asleep(time_to_eat/2, philo);
+		half_asleep(min(time_to_eat, time_to_sleep)/2, philo);
 	while ((get_other_time(&philo->shared->time) - philo->last_meal) <= time_to_die)
 	{
 		if (!check_death(philo))
 		{
-			if (philo->philo_id % 2 == 0)
-			{
-				pthread_mutex_lock(philo->chopstick_r);
-				say(philo, "took right chopstick");	
-			}
-			else
-			{
+			// if (philo->philo_id % 2 == 0)
+			// {
+			// 	pthread_mutex_lock(philo->chopstick_r);
+			// 	say(philo, "took right chopstick");	
+			// }
+			// else
+			// {
 				pthread_mutex_lock(&philo->chopstick_l);
 				say(philo, "took left chopstick");
-			}
+			// }
 			if (!check_death(philo))
 			{
-				if (philo->philo_id % 2 == 0)
-				{
-					pthread_mutex_lock(&philo->chopstick_l);
-					say(philo, "took right chopstick");	
-				}
-				else
-				{
+				// if (philo->philo_id % 2 == 0)
+				// {
+				// 	pthread_mutex_lock(&philo->chopstick_l);
+				// 	say(philo, "took right chopstick");	
+				// }
+				// else
+				// {
 					pthread_mutex_lock(philo->chopstick_r);
 					say(philo, "took left chopstick");
-				}
+				// }
 				// pthread_mutex_lock(&philo->chopstick_l);
 				// say(philo, "took left chopstick");
 				if (!check_death(philo))
@@ -118,14 +126,14 @@ void* trial_routine(void *p)
 					pthread_mutex_unlock(&philo->set_meal);
 					half_asleep(time_to_eat, philo);
 				}
-				if (philo->philo_id % 2 == 0)	
-					pthread_mutex_unlock(&philo->chopstick_l);
-				else
+				// if (philo->philo_id % 2 == 0)	
+				// 	pthread_mutex_unlock(&philo->chopstick_l);
+				// else
 					pthread_mutex_unlock(philo->chopstick_r);
 			}	
-			if (philo->philo_id % 2 == 0)	
-				pthread_mutex_unlock(philo->chopstick_r);
-			else
+			// if (philo->philo_id % 2 == 0)	
+			// 	pthread_mutex_unlock(philo->chopstick_r);
+			// else
 				pthread_mutex_unlock(&philo->chopstick_l);
 			// pthread_mutex_unlock(philo->chopstick_r);
 		}
@@ -134,8 +142,8 @@ void* trial_routine(void *p)
 		say(philo, "is sleeping");
 		half_asleep(time_to_sleep, philo);
 		say(philo, "is thinking");
-		if (philo->shared->number_of_philos % 2 != 0)
-			half_asleep(time_to_eat/2, philo);
+		// if (philo->shared->number_of_philos % 2 != 0)
+		// 	half_asleep(min(time_to_eat, time_to_sleep)/2, philo);
 	}
 	if (philo->meals != normal_exit)
 	{
