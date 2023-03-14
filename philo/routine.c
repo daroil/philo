@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 15:52:14 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 16:53:25 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:04:30 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,12 @@ void	*philo_routine(void *p)
 	{
 		if (!check_death(philo))
 		{
-			// if (philo->philo_id % 2 == 0)
-			// {
-			// 	pthread_mutex_lock(philo->chopstick_r);
-			// 	say(philo, "took right chopstick");
-			// }
-			// else
-			// {
-				pthread_mutex_lock(&philo->chopstick_l);
-			// 	say(philo, "took left chopstick");
-			// }
+			pthread_mutex_lock(&philo->chopstick_l);
+			say(philo, "took left chopstick");
 			if (!check_death(philo))
 			{
-				// if (philo->philo_id % 2 == 0)
-				// {
-				// 	pthread_mutex_lock(&philo->chopstick_l);
-				// 	say(philo, "took left chopstick");
-				// }
-				// else
-				// {
-				// 	pthread_mutex_lock(philo->chopstick_r);
-				// 	say(philo, "took right chopstick");
-				// }
 				pthread_mutex_lock(philo->chopstick_r);
-				// say(philo, "took right chopstick");
+				say(philo, "took right chopstick");
 				if (!check_death(philo))
 				{
 					pthread_mutex_lock(&philo->eat);
@@ -68,16 +50,9 @@ void	*philo_routine(void *p)
 					pthread_mutex_unlock(&philo->set_meal);
 					half_asleep(time_to_eat, philo);
 				}
-				// if (philo->philo_id % 2 == 0)
-				// 	pthread_mutex_unlock(&philo->chopstick_l);
-				// else
-					pthread_mutex_unlock(philo->chopstick_r);
+				pthread_mutex_unlock(philo->chopstick_r);
 					
 			}	
-				// if (philo->philo_id % 2 == 0)
-				// 	pthread_mutex_unlock(philo->chopstick_r);
-				// else
-				// 	pthread_mutex_unlock(&philo->chopstick_l);
 			pthread_mutex_unlock(&philo->chopstick_l);
 		}
 		if (philo->meals == normal_exit)
@@ -85,8 +60,6 @@ void	*philo_routine(void *p)
 		say(philo, "is sleeping");
 		half_asleep(time_to_sleep, philo);
 		say(philo, "is thinking");
-		// if (philo->shared->number_of_philos % 2 == 0)
-		// 	half_asleep(min(time_to_eat, time_to_sleep) / 2, philo);
 	}
 	if (philo->meals != normal_exit)
 	{
