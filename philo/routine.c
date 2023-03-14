@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 15:52:14 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 17:04:30 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:08:14 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	*philo_routine(void *p)
 	while ((get_other_time(&philo->shared->time)
 			- philo->last_meal) <= philo->shared->time_to_die)
 	{
+		if (philo->meals == normal_exit)
+			break ;
 		if (!check_death(philo))
 		{
 			pthread_mutex_lock(&philo->chopstick_l);
@@ -55,8 +57,6 @@ void	*philo_routine(void *p)
 			}	
 			pthread_mutex_unlock(&philo->chopstick_l);
 		}
-		if (philo->meals == normal_exit)
-			break ;
 		say(philo, "is sleeping");
 		half_asleep(time_to_sleep, philo);
 		say(philo, "is thinking");

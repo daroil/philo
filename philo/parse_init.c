@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:38:05 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 15:46:20 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 17:08:04 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	parse_input(int argc, char **argv, t_shared *shared_info)
 	if (argv[5])
 	{
 		shared_info->to_be_fed = ph_atoi(argv[5]);
-		if (!shared_info->to_be_fed)
+		if (shared_info->to_be_fed < 0)
 			return (1);
 	}
 	else
