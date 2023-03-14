@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/11 01:45:46 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/13 12:56:56 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,17 @@ typedef struct shared_s
 	long long		time_to_die;
 	long long		time_to_eat;
 	long long		time_to_sleep;
+	int				to_be_fed;
 }	t_shared;
 
 typedef struct philo_s
 {
-	int				input;
-	int				output;
+	int				meals;
 	int				philo_id;
 	long long		last_meal;
 	pthread_mutex_t	eat;
 	pthread_mutex_t	sleep;
+	pthread_mutex_t	set_meal;
 	pthread_mutex_t	chopstick_l;
 	pthread_mutex_t	*chopstick_r;
 	pthread_t		id;

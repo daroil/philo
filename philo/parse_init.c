@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:38:05 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/11 01:38:36 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 12:42:51 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ int	philo_init(t_shared *shared_info, t_philo *philo)
 	{
 		if (pthread_mutex_init(&philo[i].chopstick_l, NULL)
 			|| pthread_mutex_init(&philo[i].eat, NULL)
+			|| pthread_mutex_init(&philo[i].set_meal, NULL)
 			|| pthread_mutex_init(&philo[i].sleep, NULL))
 		{
 			printf("\n mutex init failed\n");
 			return (1);
 		}
 		philo[i].philo_id = i;
+		philo[i].meals = 0;
 		philo[i].shared = shared_info;
 		philo[i].chopstick_r = &philo[(i + 1) % shared_info->number_of_philos].chopstick_l;
 		i++;
@@ -52,9 +54,9 @@ int	ph_atoi(char *str)
 	{
 		if ('0' <= str[i] && str[i] <= '9')
 		{
-		res *= 10;
-		res += sign * (str[i] - '0');
-		i++;
+			res *= 10;
+			res += sign * (str[i] - '0');
+			i++;
 		}
 		else
 			return (0);
@@ -71,6 +73,13 @@ int	parse_input(int argc, char **argv, t_shared *shared_info)
 		|| !(shared_info->time_to_eat = ph_atoi(argv[3]))
 		|| !(shared_info->time_to_sleep = ph_atoi(argv[4])))
 			return (1);
+	if (argv[5])
+	{
+		if (!(shared_info->to_be_fed = ph_atoi(argv[5])))
+			return (1);
+	}
+	else 
+		shared_info->to_be_fed = -1;
 	shared_info->dead = 0;
 	if (pthread_mutex_init(&shared_info->print, NULL)
 		|| pthread_mutex_init(&shared_info->time, NULL)
