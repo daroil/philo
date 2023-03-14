@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:38:05 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 12:42:51 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:45:08 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	philo_init(t_shared *shared_info, t_philo *philo)
 
 int	ph_atoi(char *str)
 {
-	int	i;
-	int	res;
-	int	sign;
+	int			i;
+	int			res;
+	int			sign;
 
 	i = 0;
 	res = 0;
@@ -73,6 +73,7 @@ int	parse_input(int argc, char **argv, t_shared *shared_info)
 		|| !(shared_info->time_to_eat = ph_atoi(argv[3]))
 		|| !(shared_info->time_to_sleep = ph_atoi(argv[4])))
 			return (1);
+	// printf("time to sleep :%lld\ntime to eat : %lld\n", shared_info->time_to_sleep, shared_info->time_to_sleep);
 	if (argv[5])
 	{
 		if (!(shared_info->to_be_fed = ph_atoi(argv[5])))
