@@ -56,16 +56,23 @@ int			get_other_time(pthread_mutex_t *time_lock);
 int			philo_init(t_shared *shared_info, t_philo *philo);
 int			ph_atoi(char *str);
 int			parse_input(int argc, char **argv, t_shared *shared_info);
+void		set_num_values(t_shared *shared_info, char **argv);
+int			check_input(t_shared *shared_info);
 
 //checks.c
 int			check_death_flag(t_philo *philo);
 int			check_death(t_philo *philo);
+long long	min(long long a, long long b);
 
 //routine.c
 void		*philo_routine(void *p);
+void		dying_scream(t_philo *philo);
+void		lonely_dude(t_philo *philo);
+
+//main.c
 void		say(t_philo *philo, char *message);
 void		half_asleep(long long sleep_time, t_philo *philo);
-long long	min(long long a, long long b);
 void		lonely_dude(t_philo *philo);
+void		destruction(t_philo *philo, t_shared *shared_info);
 
 #endif
