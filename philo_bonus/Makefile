@@ -10,13 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc -Wall -Wextra -Werror
+CC = gcc -Wall -Wextra -Werror -lrt
 
 SRCS =	main.c \
-		checks.c \
 		parse_init.c \
-		time.c \
-		routine.c
+# checks.c \
+time.c \
+routine.c
 
 NAME =  philo
 LIBFT = ./libft

@@ -12,30 +12,21 @@
 
 #include "philo.h"
 
-int	philo_init(t_shared *shared_info, t_philo *philo)
-{
-	int	i;
+// int	philo_init(t_shared *shared_info, t_philo *philo)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < shared_info->number_of_philos)
-	{
-		// if (pthread_mutex_init(&philo[i].chopstick_l, NULL)
-		// 	|| pthread_mutex_init(&philo[i].eat, NULL)
-		// 	|| pthread_mutex_init(&philo[i].set_meal, NULL)
-		// 	|| pthread_mutex_init(&philo[i].sleep, NULL))
-		// {
-		// 	printf("\n mutex init failed\n");
-		// 	return (1);
-		// }
-		philo[i].philo_id = i;
-		philo[i].meals = 0;
-		philo[i].shared = shared_info;
-		philo[i].chopstick_r = &philo[(i + 1)
-			% shared_info->number_of_philos].chopstick_l;
-		i++;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	while (i < shared_info->number_of_philos)
+// 	{
+
+// 		philo[i].philo_id = i;
+// 		philo[i].meals = 0;
+// 		philo[i].shared = shared_info;
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 int	ph_atoi(char *str)
 {
@@ -99,12 +90,12 @@ int	parse_input(int argc, char **argv, t_shared *shared_info)
 	else
 		shared_info->to_be_fed = -1;
 	shared_info->dead = 0;
-	if (pthread_mutex_init(&shared_info->print, NULL)
-		|| pthread_mutex_init(&shared_info->time, NULL)
-		|| pthread_mutex_init(&shared_info->dead_mut, NULL))
-	{
-		printf("\n mutex init failed\n");
-		return (1);
-	}
+	// if (pthread_mutex_init(&shared_info->print, NULL)
+	// 	|| pthread_mutex_init(&shared_info->time, NULL)
+	// 	|| pthread_mutex_init(&shared_info->dead_mut, NULL))
+	// {
+	// 	printf("\n mutex init failed\n");
+	// 	return (1);
+	// }
 	return (0);
 }
