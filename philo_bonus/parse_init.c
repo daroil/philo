@@ -19,14 +19,14 @@ int	philo_init(t_shared *shared_info, t_philo *philo)
 	i = 0;
 	while (i < shared_info->number_of_philos)
 	{
-		if (pthread_mutex_init(&philo[i].chopstick_l, NULL)
-			|| pthread_mutex_init(&philo[i].eat, NULL)
-			|| pthread_mutex_init(&philo[i].set_meal, NULL)
-			|| pthread_mutex_init(&philo[i].sleep, NULL))
-		{
-			printf("\n mutex init failed\n");
-			return (1);
-		}
+		// if (pthread_mutex_init(&philo[i].chopstick_l, NULL)
+		// 	|| pthread_mutex_init(&philo[i].eat, NULL)
+		// 	|| pthread_mutex_init(&philo[i].set_meal, NULL)
+		// 	|| pthread_mutex_init(&philo[i].sleep, NULL))
+		// {
+		// 	printf("\n mutex init failed\n");
+		// 	return (1);
+		// }
 		philo[i].philo_id = i;
 		philo[i].meals = 0;
 		philo[i].shared = shared_info;
