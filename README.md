@@ -1,4 +1,4 @@
-    Philosophers Project
+    **Philosophers Project**
 
 
 This project is a multithreaded program that simulates the dining philosophers problem. The challenge in this problem is to prevent deadlocks and starvation, where philosophers may be left hungry and unable to eat. To overcome this challenge, the program uses mutexes and semaphores to control the access to shared resources such as chopsticks the philosophers use to eat.
