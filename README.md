@@ -28,7 +28,7 @@ Run the program with the desired number of philosophers and times they will eat.
 
 To run the program, use the following command:
 
-./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [<number_of_times_each_philosopher_must_eat>]
+    ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [<number_of_times_each_philosopher_must_eat>]
 
 number_of_philosophers: The number of philosophers sitting at the table.
 
