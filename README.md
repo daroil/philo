@@ -18,7 +18,9 @@ Implementation Details
 To install and run this program, follow these steps:
 
 Clone this repository to your local machine.
-Compile the program by running make.
+
+Compile the program by going into desired folder and then running make.
+
 Run the program with the desired number of philosophers and times they will eat.
 
 
