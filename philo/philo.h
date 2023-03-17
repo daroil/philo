@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 17:20:16 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/17 12:58:30 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct shared_s
 	pthread_mutex_t	print;
 	pthread_mutex_t	time;
 	pthread_mutex_t	dead_mut;
+	pthread_mutex_t	check_flag_mut;
 	int				dead;
 	long long		time_to_die;
 	long long		time_to_eat;

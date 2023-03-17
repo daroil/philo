@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 15:52:14 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 17:19:54 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/17 13:41:40 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,17 @@ void	eating_routine(t_philo *philo)
 
 void	dying_scream(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->shared->check_flag_mut);
 	if (!philo->shared->dead)
 	{
+		philo->shared->dead = 1;
+		pthread_mutex_unlock(&philo->shared->check_flag_mut);
 		pthread_mutex_lock(&philo->shared->print);
 		printf("%d id: %d died\n", get_other_time(&philo->shared->time),
 			philo->philo_id);
-		philo->shared->dead = 1;
 		pthread_mutex_unlock(&philo->shared->print);
 	}
+	pthread_mutex_unlock(&philo->shared->check_flag_mut);
 }
 
 void	*philo_routine(void *p)

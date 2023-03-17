@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:38:05 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 17:08:04 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/17 13:41:34 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	parse_input(int argc, char **argv, t_shared *shared_info)
 	shared_info->dead = 0;
 	if (pthread_mutex_init(&shared_info->print, NULL)
 		|| pthread_mutex_init(&shared_info->time, NULL)
-		|| pthread_mutex_init(&shared_info->dead_mut, NULL))
+		|| pthread_mutex_init(&shared_info->check_flag_mut, NULL))
 	{
 		printf("\n mutex init failed\n");
 		return (1);
