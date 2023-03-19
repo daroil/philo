@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/14 17:20:16 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/17 14:10:30 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <signal.h>
 # include <sys/time.h> // gettimeofday
 # include <unistd.h> // usleep
 # include <stddef.h> // NULL
