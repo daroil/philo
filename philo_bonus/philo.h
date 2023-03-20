@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/20 18:35:18 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/20 19:29:48 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct philo_s
 	int				philo_id;
 	long long		last_meal;
 	t_shared		*shared;
+	int				dead;
 }	t_philo;
 
 //time.c

@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:37:19 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/20 18:36:50 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/20 19:33:17 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,18 @@ int	check_death(t_philo *philo)
 	if ((get_other_time()
 			- philo->last_meal) >= philo->time_to_die)
 	{
-		sem_wait(philo->print);	
-		printf("%d id: %d died\n", get_other_time(),
-			philo->philo_id);
-		sem_post(philo->print);	
+		if (!philo->dead)
+		{
+			philo->dead = 1;
+			sem_wait(philo->print);	
+			printf("%d id: %d died\n", get_other_time(),
+				philo->philo_id);
+			sem_post(philo->print);
+		}
+		// sem_unlink("print");
+		// sem_close(philo->print);
+		exit (1);
+		return (1);	
 	}
 	return (0);
 }

@@ -6,12 +6,13 @@
 #    By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/26 16:57:06 by dhendzel          #+#    #+#              #
-#    Updated: 2023/03/20 18:34:04 by dhendzel         ###   ########.fr        #
+#    Updated: 2023/03/20 19:40:54 by dhendzel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc -Wall -Wextra -Werror -fsanitize=address
+CC = gcc -Wall -Wextra -Werror 
 # -lrt
+# -fsanitize=address
 SRCS =	main.c \
 		parse_init.c \
 		time.c \
