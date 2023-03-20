@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/17 14:10:30 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:35:18 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@
 typedef struct shared_s
 {
 	int				number_of_philos;
-	pthread_mutex_t	print;
-	pthread_mutex_t	time;
-	pthread_mutex_t	dead_mut;
 	int				dead;
 	long long		time_to_die;
 	long long		time_to_eat;
@@ -42,21 +39,21 @@ typedef struct shared_s
 
 typedef struct philo_s
 {
+	long long		time_to_die;
+	long long		time_to_eat;
+	long long		time_to_sleep;
+	sem_t			*forks;
+	sem_t			*print;
+	int				to_be_fed;
 	int				meals;
 	int				philo_id;
 	long long		last_meal;
-	pthread_mutex_t	eat;
-	pthread_mutex_t	sleep;
-	pthread_mutex_t	set_meal;
-	pthread_mutex_t	chopstick_l;
-	pthread_mutex_t	*chopstick_r;
-	pthread_t		id;
 	t_shared		*shared;
 }	t_philo;
 
 //time.c
 long long	get_time(void);
-int			get_other_time(pthread_mutex_t *time_lock);
+int			get_other_time(void);
 
 //parse_init.c
 int			philo_init(t_shared *shared_info, t_philo *philo);
