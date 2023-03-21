@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:37:19 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/20 19:33:17 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:26:17 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ long long	min(long long a, long long b)
 
 int	check_death(t_philo *philo)
 {
+	int i;
+
 	if ((get_other_time()
 			- philo->last_meal) >= philo->time_to_die)
 	{
@@ -43,6 +45,14 @@ int	check_death(t_philo *philo)
 				philo->philo_id);
 			sem_post(philo->print);
 		}
+		i = 0;		
+		while (i < philo->taken_chops)
+		{
+			sem_post(philo->chopsticks);
+			i++;
+		}
+		// sem_unlink("forks");
+		// sem_close(philo->forks);
 		// sem_unlink("print");
 		// sem_close(philo->print);
 		exit (1);

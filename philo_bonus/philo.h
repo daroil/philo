@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/20 19:29:48 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:22:05 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct philo_s
 	long long		time_to_die;
 	long long		time_to_eat;
 	long long		time_to_sleep;
-	sem_t			*forks;
+	sem_t			*chopsticks;
 	sem_t			*print;
 	int				to_be_fed;
 	int				meals;
@@ -50,6 +50,7 @@ typedef struct philo_s
 	long long		last_meal;
 	t_shared		*shared;
 	int				dead;
+	int				taken_chops;	
 }	t_philo;
 
 //time.c

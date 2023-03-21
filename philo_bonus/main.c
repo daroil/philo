@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/20 19:42:15 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:25:21 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	half_asleep(long long sleep_time, t_philo *philo)
 		if (!check_death(philo))
 			usleep(200);
 		else
-		{
 			return ;
-		}
 	}
 }
 
@@ -58,8 +56,9 @@ int	main(int argc, char **argv)
 	philo.time_to_eat = 200;
 	philo.time_to_sleep = 200;
 	philo.dead = 0;
-	sem_unlink("forks");
-	philo.forks = sem_open("forks", O_CREAT, 0644, number_of_philos);
+	philo.taken_chops = 0;
+	sem_unlink("chopsticks");
+	philo.chopsticks = sem_open("chopsticks", O_CREAT, 0644, number_of_philos);
 	sem_unlink("print");
 	philo.print = sem_open("print", O_CREAT, 0644, 1);
 	printf("argc: %d argv[0]: %s\n",argc, argv[0]);
@@ -76,19 +75,27 @@ int	main(int argc, char **argv)
 				half_asleep(philo.time_to_eat/2, &philo);
 			while (!check_death(&philo))
 			{
-				sem_wait(philo.forks);
+				// printf("try first sem\n");
+				sem_wait(philo.chopsticks);
+				philo.taken_chops++;
+				// printf("done first sem\n");
 				say(&philo, "took a chopstick");
 				if (!check_death(&philo))
 				{
-					sem_wait(philo.forks);
+				// printf("try sec sem\n");
+					sem_wait(philo.chopsticks);
+					philo.taken_chops++;
+				// printf("done sec sem\n");
 					say(&philo, "took a chopstick");
 					philo.last_meal = get_other_time();
 					say(&philo, "is eating");
 					half_asleep(philo.time_to_eat, &philo);
-					say(&philo, "released a chopstick");
-					sem_post(philo.forks);
+					sem_post(philo.chopsticks);
+					philo.taken_chops--;
+					// say(&philo, "released a chopstick");
 				}
-				sem_post(philo.forks);
+				sem_post(philo.chopsticks);
+				philo.taken_chops--;
 				say(&philo, "is sleeping");
 				half_asleep(philo.time_to_sleep, &philo);
 			}
@@ -111,7 +118,7 @@ int	main(int argc, char **argv)
 	}
 	sem_unlink("print");
 	sem_close(philo.print);
-	sem_unlink("forks");
-	sem_close(philo.forks);
+	sem_unlink("chopsticks");
+	sem_close(philo.chopsticks);
 	return (0);
 }
