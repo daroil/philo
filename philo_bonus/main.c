@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/21 14:25:21 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:58:02 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,25 @@ void	check_leaks(void)
 	system("leaks philo");
 }
 
+// void	kill_philos(t_philo *philo, int to_kill, int sig)
+// {
+// 	static t_philo	*local_philo = NULL;
+// 	// int				i;
+	
+// 	if (!local_philo)
+// 		local_philo = philo;
+// 	if (to_kill && sig == SIGTERM)
+// 	{
+// 		local_philo->dead = 1;
+// 		// exit(1);
+// 	}
+// }
+
+// void	die_philo(int sig)
+// {
+// 	kill_philos(NULL, 1, sig);
+// }
+
 int	main(int argc, char **argv)
 {
 	
@@ -70,29 +89,26 @@ int	main(int argc, char **argv)
 		philosopher[i] = fork();
 		if (!philosopher[i])
 		{
+			// kill_philos(&philo, 0, 0);
+			// signal(SIGTERM, die_philo);
 			philo.philo_id = i;
 			if (i % 2 == 0)
 				half_asleep(philo.time_to_eat/2, &philo);
 			while (!check_death(&philo))
 			{
-				// printf("try first sem\n");
 				sem_wait(philo.chopsticks);
 				philo.taken_chops++;
-				// printf("done first sem\n");
 				say(&philo, "took a chopstick");
 				if (!check_death(&philo))
 				{
-				// printf("try sec sem\n");
 					sem_wait(philo.chopsticks);
 					philo.taken_chops++;
-				// printf("done sec sem\n");
 					say(&philo, "took a chopstick");
 					philo.last_meal = get_other_time();
 					say(&philo, "is eating");
 					half_asleep(philo.time_to_eat, &philo);
 					sem_post(philo.chopsticks);
 					philo.taken_chops--;
-					// say(&philo, "released a chopstick");
 				}
 				sem_post(philo.chopsticks);
 				philo.taken_chops--;
@@ -110,6 +126,8 @@ int	main(int argc, char **argv)
 		printf("i: %d, exit code: %d\n", i, exit_code);
 		if (WEXITSTATUS(exit_code))
 		{
+			printf("killing children\n");
+			// sem_post(philo.print);
 			while (i < number_of_philos - 1)
 				kill(philosopher[++i], SIGTERM);
 			break;
