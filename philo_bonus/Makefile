@@ -6,7 +6,7 @@
 #    By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/26 16:57:06 by dhendzel          #+#    #+#              #
-#    Updated: 2023/03/22 14:29:38 by dhendzel         ###   ########.fr        #
+#    Updated: 2023/03/22 15:03:42 by dhendzel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ SRCS =	main.c \
 		parse_init.c \
 		time.c \
 		checks.c \
+		routine.c \
+		
 # checks.c \
 time.c \
 routine.c

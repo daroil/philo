@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:38:05 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:49:08 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 15:10:16 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	philo_init(t_philo *philo, char **argv, int argc)
 	philo->to_die = 0;
 	sem_unlink("dead");
 	sem_unlink("chopsticks");
-	philo->chopsticks = sem_open("chopsticks", O_CREAT, 0600, philo->number_of_philos);
+	philo->chopsticks = sem_open("chopsticks", O_CREAT,
+			0600, philo->number_of_philos);
 	sem_unlink("print");
 	philo->print = sem_open("print", O_CREAT, 0644, 1);
 	return (0);
