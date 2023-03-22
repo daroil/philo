@@ -6,11 +6,25 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 15:10:00 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 15:14:05 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	lonely_dude(t_philo *philo)
+{
+	if (!check_death(philo))
+	{
+		sem_wait(philo->chopsticks);
+		philo->taken_chops++;
+		say(philo, "took a chopstick");
+	}
+	sem_post(philo->chopsticks);
+	half_asleep(philo->time_to_die, philo);
+	say(philo, "died");
+	exit(1);
+}
 
 void	second_chopstick(t_philo *philo)
 {
@@ -58,12 +72,17 @@ int	main(int argc, char **argv)
 	philosopher = malloc(sizeof(pid_t) * philo.number_of_philos);
 	i = 0;
 	philo.last_meal = get_other_time();
-	while (i < philo.number_of_philos)
+	if (philo.number_of_philos == 1)
+		lonely_dude(&philo);
+	else
 	{
-		philosopher[i] = fork();
-		if (!philosopher[i])
-			child_actions(&philo, i);
-		i++;
+		while (i < philo.number_of_philos)
+		{
+			philosopher[i] = fork();
+			if (!philosopher[i])
+				child_actions(&philo, i);
+			i++;
+		}
 	}
 	waiting(&philo, philosopher);
 	return (0);
