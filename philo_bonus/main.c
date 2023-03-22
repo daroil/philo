@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:32:52 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:49:45 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,22 @@ void	say(t_philo *philo, char *message)
 			sem_unlink("dead");
 			sem_close(philo->dead);
 		}
+		else
+			philo->to_die = 1;
 		sem_post(philo->print);
 	}
 }
 
 void	set_meal(t_philo *philo)
 {
-		philo->dead = sem_open("dead", O_CREAT | O_EXCL, 0600, 0);
-		if (philo->dead != SEM_FAILED)
-		{
+		// philo->dead = sem_open("dead", O_CREAT | O_EXCL, 0600, 0);
+		// if (philo->dead != SEM_FAILED)
+		// {
 			philo->last_meal = get_other_time();
 			philo->meals++;
-			sem_unlink("dead");
-			sem_close(philo->dead);
-		}
+			// sem_unlink("dead");
+			// sem_close(philo->dead);
+		// }
 }
 
 int	main(int argc, char **argv)
@@ -75,8 +77,10 @@ int	main(int argc, char **argv)
 			philo.philo_id = i;
 			if (i % 2 == 0)
 				half_asleep(philo.time_to_eat/2, &philo);
-			while (!check_death(&philo) && philo.meals < philo.to_be_fed)
+			while (!check_death(&philo))
 			{
+				if (philo.meals == philo.to_be_fed)
+					break ;
 				sem_wait(philo.chopsticks);
 				philo.taken_chops++;
 				say(&philo, "took a chopstick");

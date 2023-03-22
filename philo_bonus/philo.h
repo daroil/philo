@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:15:49 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:48:52 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 typedef struct philo_s
 {
 	int				philo_id;
+	int				to_die;
 	int				number_of_philos;
 	int				to_be_fed;
 	int				meals;

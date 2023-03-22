@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 01:37:19 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 13:57:29 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:50:11 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ int	check_death(t_philo *philo)
 		}
 		return (1);	
 	}
+	if (philo->to_die)
+		return (1);
 	return (0);
 }
