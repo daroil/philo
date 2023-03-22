@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:49:45 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:55:15 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,8 @@ void	say(t_philo *philo, char *message)
 
 void	set_meal(t_philo *philo)
 {
-		// philo->dead = sem_open("dead", O_CREAT | O_EXCL, 0600, 0);
-		// if (philo->dead != SEM_FAILED)
-		// {
-			philo->last_meal = get_other_time();
-			philo->meals++;
-			// sem_unlink("dead");
-			// sem_close(philo->dead);
-		// }
+	philo->last_meal = get_other_time();
+	philo->meals++;
 }
 
 int	main(int argc, char **argv)
@@ -100,12 +94,6 @@ int	main(int argc, char **argv)
 				say(&philo, "is sleeping");
 				half_asleep(philo.time_to_sleep, &philo);
 			}
-			// i = 0;		
-			// while (i < philo.taken_chops)
-			// {
-			// 	sem_post(philo.chopsticks);
-			// 	i++;
-			// }
 			exit(1);
 		}
 		i++;
@@ -114,14 +102,6 @@ int	main(int argc, char **argv)
 	while (i < philo.number_of_philos)
 	{
 		waitpid(philosopher[i], &exit_code, 0);
-		// printf("i: %d, exit code: %d\n", i, exit_code);
-		// if (WEXITSTATUS(exit_code))
-		// {
-		// 	printf("killing children\n");
-		// 	while (i < philo.number_of_philos - 1)
-		// 		kill(philosopher[++i], SIGTERM);
-		// 	break;
-		// }
 		i++;
 	}
 	sem_unlink("print");
