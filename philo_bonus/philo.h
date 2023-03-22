@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 15:05:05 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 15:17:47 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void		set_num_values(t_philo *philo, char **argv);
 int			check_death_flag(t_philo *philo);
 int			check_death(t_philo *philo);
 
-//
-void		*philo_routine(void *p);
-long long	min(long long a, long long b);
+//main.c
 void		lonely_dude(t_philo *philo);
+void		second_chopstick(t_philo *philo);
+void		child_actions(t_philo *philo, int i);
 
 //routine.c
 void		half_asleep(long long sleep_time, t_philo *philo);
