@@ -6,11 +6,11 @@
 #    By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/26 16:57:06 by dhendzel          #+#    #+#              #
-#    Updated: 2023/03/21 14:05:31 by dhendzel         ###   ########.fr        #
+#    Updated: 2023/03/22 14:01:20 by dhendzel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc -Wall -Wextra -Werror 
+CC = gcc -Wall -Wextra -Werror -fsanitize=address
 # -lrt
 # -fsanitize=address
 SRCS =	main.c \

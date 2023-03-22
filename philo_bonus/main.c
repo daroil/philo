@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/21 14:58:02 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:18:41 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,66 +31,48 @@ void	say(t_philo *philo, char *message)
 	if (!check_death(philo))
 	{
 		sem_wait(philo->print);
-		if (!philo->dead)
+		philo->dead = sem_open("dead", O_CREAT | O_EXCL, 0600, 0);
+		if (philo->dead != SEM_FAILED)
+		{
 			printf("%d id: %d %s\n", get_other_time(), philo->philo_id, message);
+			sem_unlink("dead");
+			sem_close(philo->dead);
+		}
 		sem_post(philo->print);
 	}
 }
 
-void	check_leaks(void)
+void	set_meal(t_philo *philo)
 {
-	system("leaks philo");
+		philo->dead = sem_open("dead", O_CREAT | O_EXCL, 0600, 0);
+		if (philo->dead != SEM_FAILED)
+		{
+			philo->last_meal = get_other_time();
+			philo->meals++;
+			sem_unlink("dead");
+			sem_close(philo->dead);
+		}
 }
-
-// void	kill_philos(t_philo *philo, int to_kill, int sig)
-// {
-// 	static t_philo	*local_philo = NULL;
-// 	// int				i;
-	
-// 	if (!local_philo)
-// 		local_philo = philo;
-// 	if (to_kill && sig == SIGTERM)
-// 	{
-// 		local_philo->dead = 1;
-// 		// exit(1);
-// 	}
-// }
-
-// void	die_philo(int sig)
-// {
-// 	kill_philos(NULL, 1, sig);
-// }
 
 int	main(int argc, char **argv)
 {
 	
 	pid_t	*philosopher;
 	int		i;
-	int		number_of_philos;
 	int		exit_code;
 	t_philo	philo;
 
-	number_of_philos = 6;
-	philo.time_to_die = 120;
-	philo.time_to_eat = 200;
-	philo.time_to_sleep = 200;
-	philo.dead = 0;
-	philo.taken_chops = 0;
-	sem_unlink("chopsticks");
-	philo.chopsticks = sem_open("chopsticks", O_CREAT, 0644, number_of_philos);
-	sem_unlink("print");
-	philo.print = sem_open("print", O_CREAT, 0644, 1);
-	printf("argc: %d argv[0]: %s\n",argc, argv[0]);
-	philosopher = malloc(sizeof(pid_t) * number_of_philos);
+	if (philo_init(&philo, argv, argc))
+		return (printf("Error\nWrong input\n"), 1);
+	// printf("%lld time to die", philo.time_to_die);
+	philosopher = malloc(sizeof(pid_t) * philo.number_of_philos);
 	i = 0;
 	get_other_time();
-	while (i < number_of_philos)
+	while (i < philo.number_of_philos)
 	{
 		philosopher[i] = fork();
 		if (!philosopher[i])
 		{
-			// kill_philos(&philo, 0, 0);
-			// signal(SIGTERM, die_philo);
 			philo.philo_id = i;
 			if (i % 2 == 0)
 				half_asleep(philo.time_to_eat/2, &philo);
@@ -104,7 +86,7 @@ int	main(int argc, char **argv)
 					sem_wait(philo.chopsticks);
 					philo.taken_chops++;
 					say(&philo, "took a chopstick");
-					philo.last_meal = get_other_time();
+					set_meal(&philo);
 					say(&philo, "is eating");
 					half_asleep(philo.time_to_eat, &philo);
 					sem_post(philo.chopsticks);
@@ -115,20 +97,25 @@ int	main(int argc, char **argv)
 				say(&philo, "is sleeping");
 				half_asleep(philo.time_to_sleep, &philo);
 			}
+			// i = 0;		
+			// while (i < philo.taken_chops)
+			// {
+			// 	sem_post(philo.chopsticks);
+			// 	i++;
+			// }
 			exit(1);
 		}
 		i++;
 	}
 	i = 0;
-	while (i < number_of_philos)
+	while (i < philo.number_of_philos)
 	{
 		waitpid(philosopher[i], &exit_code, 0);
 		printf("i: %d, exit code: %d\n", i, exit_code);
 		if (WEXITSTATUS(exit_code))
 		{
 			printf("killing children\n");
-			// sem_post(philo.print);
-			while (i < number_of_philos - 1)
+			while (i < philo.number_of_philos - 1)
 				kill(philosopher[++i], SIGTERM);
 			break;
 		}
@@ -138,5 +125,7 @@ int	main(int argc, char **argv)
 	sem_close(philo.print);
 	sem_unlink("chopsticks");
 	sem_close(philo.chopsticks);
+	sem_unlink("dead");
+	sem_close(philo.dead);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:40 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/21 14:22:05 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:15:49 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,20 @@
 # include <unistd.h> // usleep
 # include <stddef.h> // NULL
 
-typedef struct shared_s
-{
-	int				number_of_philos;
-	int				dead;
-	long long		time_to_die;
-	long long		time_to_eat;
-	long long		time_to_sleep;
-	int				to_be_fed;
-}	t_shared;
-
 typedef struct philo_s
 {
+	int				philo_id;
+	int				number_of_philos;
+	int				to_be_fed;
+	int				meals;
+	int				taken_chops;	
 	long long		time_to_die;
 	long long		time_to_eat;
 	long long		time_to_sleep;
+	long long		last_meal;
 	sem_t			*chopsticks;
 	sem_t			*print;
-	int				to_be_fed;
-	int				meals;
-	int				philo_id;
-	long long		last_meal;
-	t_shared		*shared;
-	int				dead;
-	int				taken_chops;	
+	sem_t			*dead;
 }	t_philo;
 
 //time.c
@@ -58,9 +48,10 @@ long long	get_time(void);
 int			get_other_time(void);
 
 //parse_init.c
-int			philo_init(t_shared *shared_info, t_philo *philo);
+int			philo_init(t_philo *philo, char **argv, int argc);
 int			ph_atoi(char *str);
-int			parse_input(int argc, char **argv, t_shared *shared_info);
+int			check_input(t_philo *philo);
+void		set_num_values(t_philo *philo, char **argv);
 
 //checks.c
 int			check_death_flag(t_philo *philo);
