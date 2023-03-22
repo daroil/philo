@@ -6,7 +6,7 @@
 /*   By: dhendzel <dhendzel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:58:09 by dhendzel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:18:41 by dhendzel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:29:23 by dhendzel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,24 @@ int	main(int argc, char **argv)
 	int		exit_code;
 	t_philo	philo;
 
+	// (void)argc;
 	if (philo_init(&philo, argv, argc))
 		return (printf("Error\nWrong input\n"), 1);
 	// printf("%lld time to die", philo.time_to_die);
+	// philo.number_of_philos = ph_atoi(argv[1]);
+	// philo.time_to_die = ph_atoi(argv[2]);
+	// philo.time_to_eat = ph_atoi(argv[3]);
+	// philo.time_to_sleep = ph_atoi(argv[4]);
+	// philo.taken_chops = 0;
+	// philo.meals = 0;
+	// sem_unlink("dead");
+	// sem_unlink("chopsticks");
+	// philo.chopsticks = sem_open("chopsticks", O_CREAT, 0600, philo.number_of_philos);
+	// sem_unlink("print");
+	// philo.print = sem_open("print", O_CREAT, 0644, 1);
 	philosopher = malloc(sizeof(pid_t) * philo.number_of_philos);
 	i = 0;
-	get_other_time();
+	philo.last_meal = get_other_time();
 	while (i < philo.number_of_philos)
 	{
 		philosopher[i] = fork();
